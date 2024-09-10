@@ -242,3 +242,42 @@ basic_data = [
   "대구 수성 더 아르코 호텔 라이온즈파크점" : 80000,
 } 
 ]
+
+import numpy as np # type: ignore
+
+
+expenses = {
+    "교통비": [],
+    "식비": [],
+    "숙박비": [],
+    "관광비": [],
+    "기타": []
+}
+
+
+for data in basic_data:
+    for key, value in data.items():
+        if "교통비" in key:
+            expenses["교통비"].append(value)
+        elif "식비" in key or "음식" in key:
+            expenses["식비"].append(value)
+        elif "숙박" in key or "호텔" in key:
+            expenses["숙박비"].append(value)
+        elif "관광비" in key or "입장료" in key:
+            expenses["관광비"].append(value)
+        else:
+            if isinstance(value, int):  
+                expenses["기타"].append(value)
+
+transport_expenses = np.array(expenses["교통비"])
+food_expenses = np.array(expenses["식비"])
+accommodation_expenses = np.array(expenses["숙박비"])
+tour_expenses = np.array(expenses["관광비"])
+other_expenses = np.array(expenses["기타"])
+
+
+print("교통비:", transport_expenses)
+print("식비:", food_expenses)
+print("숙박비:", accommodation_expenses)
+print("관광비:", tour_expenses)
+print("기타:", other_expenses)
