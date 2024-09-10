@@ -243,41 +243,91 @@ basic_data = [
 } 
 ]
 
-import numpy as np # type: ignore
-
-
-expenses = {
-    "교통비": [],
-    "식비": [],
-    "숙박비": [],
-    "관광비": [],
-    "기타": []
-}
+total_transport = 0
+count_transport = 0
 
 
 for data in basic_data:
     for key, value in data.items():
-        if "교통비" in key:
-            expenses["교통비"].append(value)
-        elif "식비" in key or "음식" in key:
-            expenses["식비"].append(value)
-        elif "숙박" in key or "호텔" in key:
-            expenses["숙박비"].append(value)
-        elif "관광비" in key or "입장료" in key:
-            expenses["관광비"].append(value)
-        else:
-            if isinstance(value, int):  
-                expenses["기타"].append(value)
+        if isinstance(value, dict):
+            for sub_key, sub_value in value.items():
+                if "교통" in sub_key:
+                    if isinstance(sub_value, (int, float)):
+                        total_transport += sub_value
+                        count_transport += 1
+                    elif isinstance(sub_value, dict):
+                        for inner_key, inner_value in sub_value.items():
+                            if "교통" in inner_key:
+                                if isinstance(inner_value, (int, float)):
+                                    total_transport += inner_value
+                                    count_transport += 1
+        elif "교통" in key:
+            if isinstance(value, (int, float)):
+                total_transport += value
+                count_transport += 1
 
-transport_expenses = np.array(expenses["교통비"])
-food_expenses = np.array(expenses["식비"])
-accommodation_expenses = np.array(expenses["숙박비"])
-tour_expenses = np.array(expenses["관광비"])
-other_expenses = np.array(expenses["기타"])
+
+print("총 교통비 합계:", total_transport)
+print("'교통'이라는 단어가 언급된 횟수:", count_transport)
+
+# import numpy as np # type: ignore
 
 
-print("교통비:", transport_expenses)
-print("식비:", food_expenses)
-print("숙박비:", accommodation_expenses)
-print("관광비:", tour_expenses)
-print("기타:", other_expenses)
+# expenses = {
+#     "교통비": [],
+#     "식비": [],
+#     "숙박비": [],
+#     "관광비": [],
+#     "기타": []
+# }
+
+
+# for data in basic_data:
+#     for key, value in data.items():
+#         if "교통비" in key:
+#             expenses["교통비"].append(value)
+#         elif "식비" in key or "음식" in key:
+#             expenses["식비"].append(value)
+#         elif "숙박" in key or "호텔" in key:
+#             expenses["숙박비"].append(value)
+#         elif "관광비" in key or "입장료" in key:
+#             expenses["관광비"].append(value)
+#         else:
+#             if isinstance(value, int):  
+#                 expenses["기타"].append(value)
+
+# transport_expenses = np.array(expenses["교통비"])
+# food_expenses = np.array(expenses["식비"])
+# accommodation_expenses = np.array(expenses["숙박비"])
+# tour_expenses = np.array(expenses["관광비"])
+# other_expenses = np.array(expenses["기타"])
+
+
+# print("교통비:", transport_expenses)
+# print("식비:", food_expenses)
+# print("숙박비:", accommodation_expenses)
+# print("관광비:", tour_expenses)
+# print("기타:", other_expenses)
+
+
+# a = []
+
+# def get_key_value(init_data):
+    
+#     global a
+        
+#     for element in init_data:
+#         if(type(element) == list):
+#             get_key_value(element)
+#         if(type(element) == dict):
+#             for key, value in element.items():
+#                 a.append(key)
+#                 if(type(value) == dict):
+#                     get_key_value(value)
+#         else:
+#             a.append(element)
+        
+        
+# get_key_value(basic_data)
+
+# print(a)
